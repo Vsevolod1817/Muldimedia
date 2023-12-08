@@ -16,7 +16,6 @@ def non_max_suppression(image, kernel_size, sigma):
     magnitude = cv2.magnitude(g_x, g_y)
     angle = np.arctan2(g_y, g_x)
     height, width = magnitude.shape
-    print(height, width)
     suppressed_image = np.zeros_like(magnitude)
 
     for i in range(1, height - 1):
@@ -52,7 +51,6 @@ def double_thresholding(image, low_threshold, high_threshold):
                 result_image[i, j] = 0
     return result_image
 
-
 image_path = '704.jpg'
 kernel_size = 5
 sigma = 2
@@ -63,11 +61,23 @@ blurred_image = cv2.GaussianBlur(image, (kernel_size, kernel_size), sigma)
 
 magnitude, angle = gradient(image, kernel_size, sigma)
 
-print("Magnitude Matrix:")
-print(magnitude)
+# Нормализация матрицы magnitude к диапазону от 0 до 1
+normalized_magnitude = magnitude/np.sum(magnitude)
 
-print("\nAngle Matrix (in radians):")
-print(angle)
+# Вывод нормализованной матрицы
+print("\nNormalized Magnitude Matrix:")
+print(normalized_magnitude)
+# Вывод суммы всех элементов
+print("\nSum of Normalized Magnitude Matrix Elements:", np.sum(normalized_magnitude))
+
+# Нормализация матрицы углов
+normalized_angle = angle / np.sum(angle)
+print("\nNormalized Angle Matrix:")
+print(normalized_angle)
+
+# Вывод суммы всех элементов
+print("\nSum of Normalized Angle Matrix Elements:", np.sum(normalized_angle))
+
 
 suppressed_image = non_max_suppression(image, kernel_size, sigma)
 
